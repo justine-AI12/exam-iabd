@@ -34,6 +34,7 @@ void main() {
     printSection("Partie 3 - Tri et recherche");
     printTrips("Top 10 trajets les plus chers", partie3.top10ExpensiveTrips(trips));
     printOptionalTrip("Meilleur trajet", partie3.bestTrip(trips));
+    printComparatorChecks(trips);
 
     printSection("Partie 4 - Traitement parallele");
     System.out.printf("Revenu total sequentiel : %.2f euros%n", partie4.totalRevenueSequential(trips));
@@ -79,6 +80,13 @@ void printOptionalTrip(String title, Optional<Trip> trip) {
             value -> printTrips(List.of(value)),
             () -> System.out.println("  Aucun trajet")
     );
+}
+
+void printComparatorChecks(List<Trip> trips) {
+    System.out.println();
+    System.out.println("Verification des comparators");
+    printOptionalTrip("Comparator byPrice - trajet le plus cher", trips.stream().max(Partie3.byPrice));
+    printOptionalTrip("Comparator byRating - trajet le mieux note", trips.stream().max(Partie3.byRating));
 }
 
 void printMap(String title, Map<String, ? extends Number> values, String unit) {
