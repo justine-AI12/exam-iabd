@@ -4,26 +4,40 @@ import models.Trip;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.ToDoubleFunction;
+import java.util.stream.Collectors;
 
 public class Partie4 {
 
+    private static final ToDoubleFunction<Trip> priceExtractor = Trip::price;
+
+    private static final Function<Trip, String> cityExtractor = Trip::city;
+
+    private static final Predicate<Trip> isPremiumTrip =
+            trip -> trip.price() > 30 && trip.rating() > 4;
+
     public double totalRevenueSequential(List<Trip> trips) {
-        // stream()
-        return 0;
+        return trips.stream()
+                .mapToDouble(priceExtractor)
+                .sum();
     }
 
     public double totalRevenueParallel(List<Trip> trips) {
-        // parallelStream()
-        return 0;
+        return trips.parallelStream()
+                .mapToDouble(priceExtractor)
+                .sum();
     }
 
     public Map<String, Long> countByCityParallel(List<Trip> trips) {
-        // coder ici
-        return Map.of();
+        return trips.parallelStream()
+                .collect(Collectors.groupingBy(cityExtractor, Collectors.counting()));
     }
 
     public List<Trip> premiumTripsParallel(List<Trip> trips) {
-        // prix > 30 et rating > 4
-        return List.of();
+        return trips.parallelStream()
+                .filter(isPremiumTrip)
+                .toList();
     }
 }
